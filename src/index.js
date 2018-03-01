@@ -125,6 +125,11 @@ class Formsy extends React.Component {
     this.resetModel(data);
   }
 
+  update = (data) => {
+    this.setFormPristine(true);
+    this.updateModel(data);
+  }
+
   resetInternal = (event) => {
     event.preventDefault();
     this.reset();
@@ -143,6 +148,20 @@ class Formsy extends React.Component {
         component.resetValue();
       }
     });
+    this.validateForm();
+  }
+
+  // Update each key (value and pristineValue) in the model to the specified value
+  updateModel = (data) => {
+    this.inputs.forEach((component) => {
+      const { name } = component.props;
+    if (data && Object.prototype.hasOwnProperty.call(data, name)) {
+      console.log('attempting to update: '+ name + ' with data: '+ data[name]);
+      component.updateValue(data[name]);
+    } else {
+      component.resetValue();
+    }
+  });
     this.validateForm();
   }
 
@@ -349,6 +368,7 @@ class Formsy extends React.Component {
       isValidValue,
       mapping,
       onChange,
+      update,
       // onError,
       onInvalidSubmit,
       onInvalid,
@@ -359,6 +379,7 @@ class Formsy extends React.Component {
       preventExternalInvalidation,
       // reset,
       resetValue,
+      updateValue,
       setValidations,
       setValue,
       showError,
@@ -401,12 +422,14 @@ Formsy.defaultProps = {
   onInvalidSubmit: () => {},
   onReset: () => {},
   onSubmit: () => {},
+  update: () => {},
   onValid: () => {},
   onValidSubmit: () => {},
   preventExternalInvalidation: false,
   resetValue: () => {},
   setValidations: () => {},
   setValue: () => {},
+  updateValue: () => {},
   showError: () => {},
   showRequired: () => {},
   validationErrors: null,
@@ -431,12 +454,14 @@ Formsy.propTypes = {
   onInvalidSubmit: PropTypes.func,
   onReset: PropTypes.func,
   onSubmit: PropTypes.func,
+  update: PropTypes.func,
   onValid: PropTypes.func,
   onValidSubmit: PropTypes.func,
   preventExternalInvalidation: PropTypes.bool,
   resetValue: PropTypes.func,
   setValidations: PropTypes.func,
   setValue: PropTypes.func,
+  updateValue: PropTypes.func,
   showError: PropTypes.func,
   showRequired: PropTypes.func,
   validationErrors: PropTypes.object, // eslint-disable-line

@@ -144,6 +144,16 @@ export default (Component) => {
       }
     }
 
+    //update the value, along with its pristineValue and pristineFlag
+    updateValue = (value) => {
+        this.setState({
+          value,
+          isPristine: true,
+        }, () => {
+          this.context.formsy.validate(this);
+      });
+    }
+
     hasValue = () => this.state.value !== '';
 
     isFormDisabled = () => this.context.formsy.isFormDisabled();
@@ -188,6 +198,7 @@ export default (Component) => {
         resetValue: this.resetValue,
         setValidations: this.setValidations,
         setValue: this.setValue,
+        updateValue: this.updateValue,
         showRequired: this.showRequired,
         showError: this.showError,
         ...this.props,
